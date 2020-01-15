@@ -3,7 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include <string>
-
+#include <time.h>
 using namespace std;
 
 constexpr char file_name[] = "C:\\cpptemp\\test.txt";

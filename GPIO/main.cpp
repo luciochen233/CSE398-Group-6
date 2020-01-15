@@ -1,81 +1,60 @@
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <string>
-
+#include "gpio.h"
+#include "pwm.h"
+#include <thread>
+#include <chrono>
 using namespace std;
 
-constexpr char file_name[] = "C:\\cpptemp\\test.txt";
-constexpr int PIN_MAX = 80;
-constexpr char GPIO_FOLDER[] = "/sys/class/gpio/gpio";
-class gpio {
-	int port;
-	int direction;
-	int value;
-public:
-	gpio(int p) {
-		port = p;
-		direction = get_direction(); // 1 is in and 0 is out
-		value = get_value();
-	}
-	int get_direction() {
-		string direction_file = GPIO_FOLDER;
-		direction_file += to_string(port);
-		direction_file += "/direction";
-		ifstream is(direction_file);
-		if (is) { is >> direction;}
-		is.close();
-		return direction;
-	}
 
-	int get_value() {
-		string value_file = GPIO_FOLDER;
-		value_file += to_string(port);
-		value_file += "/value";
-		ifstream is(value_file);
-		if (is) { is >> value;}
-		is.close();
-		return value;
-	}
 
-	bool set_direction(int d) {
-		if (d != 1 && d != 0) return false;
-		if (d == get_direction()) return true;
-		string direction_file = GPIO_FOLDER;
-		direction_file += to_string(port);
-		direction_file += "/direction";
-		ofstream is(direction_file,ios::trunc | ios::out);
-		if (d == 1) {is << "in";}
-		if (d == 2) {is << "out";}
-		if (d == get_direction()) {return true;}
-		else {cout << "ERROR, direction has not changed!" << endl;}
-		return false;
-	}
+void task1(){
+	gpio g67(67);
+    gpio g66(66);
 
-	bool set_value(int v) {
-		if (v != 1 && v != 0) return false;
-		if (get_direction() == 1) return false;
-		string value_file = GPIO_FOLDER;
-		value_file += to_string(port);
-		value_file += "/value";
-		ofstream is(value_file, ios::trunc | ios::out);
-		is << v;
-		is.close();
-		if (v == get_value()) { return true; }
-		else { cout << "ERROR, value is not changed" << endl; }
-	}
+	cout << "66's value" << endl;
+	int p66 = 0;
+	cin >> p66;
+    g66.set_direction(0); // 0 is out
+    g66.set_value(p66);
 
-};
+	cin.get();
+	cin.get();
+	cout << "change 66's direction to input" << endl;
+	g66.set_direction(1);
+	cout << "hit enter when ready" << endl;
+	cin.get();
+	cin.get();
+	cout << "the value for port 66 is : " << g66.get_value() << endl;
+}
+
+void task2(){
+	gpio g66(66);
+	g66.set_direction(0);
+	while(1){
+		g66.set_value(1);
+		g66.set_value(0);
+	}
+}
 
 int main() {
+	pwm pwm0(0);
+	cout << "duty_cycle " << pwm0.get_duty_cycle() << endl;
+	cout << "enable " << pwm0.get_enable() << endl;
+	cout << "period " << pwm0.get_period() << endl;
+	cout << "polarity " << pwm0.get_polarity() << endl;
+	while(1){
+		pwm0.set_duty_cycle(200000);
+		std::this_thread::sleep_for (std::chrono::seconds(1));
+		pwm0.set_duty_cycle(400000);
+		std::this_thread::sleep_for (std::chrono::seconds(1));
+		pwm0.set_duty_cycle(600000);
+		std::this_thread::sleep_for (std::chrono::seconds(1));
+		pwm0.set_duty_cycle(800000);
+		std::this_thread::sleep_for (std::chrono::seconds(1));
+		pwm0.set_duty_cycle(1000000);
+		std::this_thread::sleep_for (std::chrono::seconds(1));
+	}
 	
-	ofstream out_file(file_name,ios::trunc|ios::out);
-	out_file << "out";
-	if (out_file) { cout << "write OK" << endl; }
-	else { cout << "write False" << endl; }
-	out_file.close();
 
-	//cout << "write lucio to file "<< file_name << endl;
-
+	
 	return 0;
 }
