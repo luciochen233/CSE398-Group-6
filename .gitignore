@@ -1,6 +1,8 @@
 file_test/Debug/
 file_test/.vs/
+file_test/x64/
 file_test/file_test/Debug/
+file_test/file_test/x64/
 file_test/file_test/v16/
 *.exe
 *.log
