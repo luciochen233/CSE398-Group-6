@@ -1,4 +1,5 @@
-﻿#include <iostream>
+﻿//Author: Guoliang Chen 
+#include <iostream>
 #include <fstream>
 #include <sstream>
 #include <string>
