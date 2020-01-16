@@ -56,18 +56,18 @@ int pwm::get_uevent(){
 	return uevent;
 }
 
-bool pwm::set_capture(int){ //don't touch
-    return false;
+bool pwm::set_capture(int){ //not implmented
+    return false; //we don't really need to change the capture
 }
-bool pwm::set_uevent(int){
+bool pwm::set_uevent(int){ //not implmented
     return false;
 }
 
 bool pwm::set_duty_cycle(int v){
     string duty_cycle_file = home_folder;
-	duty_cycle_file += "duty_cycle";
+	duty_cycle_file += "duty_cycle"; // generate the file path
 	ofstream is(duty_cycle_file, ios::trunc | ios::out);
-	is << v;
+	is << v; //read from the file
 	is.close();
 }
 bool pwm::set_enable(int v){

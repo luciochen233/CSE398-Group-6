@@ -1,21 +1,20 @@
 #include "gpio.h"
 
-
 gpio::gpio(int p) {
-	port = p;
+	port = p; //GPIO number
 	direction = get_direction(); // 1 is in and 0 is out
 	value = get_value();
 }
+
 int gpio::get_direction() {
-	string direction_file = GPIO_FOLDER;
-	direction_file += to_string(port);
-	direction_file += "/direction";
-	ifstream is(direction_file);
-	string temp_direction;
+	string direction_file = GPIO_FOLDER; //GPIO_FOLDER is the default folder for GPIO
+	direction_file += to_string(port); //add the GPIO port number in the end
+	direction_file += "/direction"; //add the file name in the end
+	ifstream is(direction_file); //open up a new input file stream 
+	string temp_direction; //This temp vairable store the value we get from reading the file.
 	if (is) { is >> temp_direction;}
 	is.close();
-	//cout << port << " direction is " << temp_direction << endl;
-	if(temp_direction == "in"){
+	if(temp_direction == "in"){ //update the direction value
 		direction = 1;
 		return 1;
 	} 
@@ -36,17 +35,14 @@ int gpio::get_value() {
 }
 
 bool gpio::set_direction(int d) {
-	//if (d != 1 && d != 0) return false;
-	//if (d == get_direction()) return true;
 	string direction_file = GPIO_FOLDER;
 	direction_file += to_string(port);
-	direction_file += "/direction";
-	//cout << port<< " direction : " << direction_file << endl;
-	ofstream is(direction_file,ios::trunc | ios::out);
-	if (d == 1) {is << "in";}
+	direction_file += "/direction"; //get the file path
+	ofstream is(direction_file,ios::trunc | ios::out); //open up the file with truncate option
+	if (d == 1) {is << "in";} //update the file with in or out based on the input
 	if (d == 0) {is << "out";}
 	is.close();
-	if (d == get_direction()) {return true;}
+	if (d == get_direction()) {return true;} //double check if we actually changed the value or not
 	else {cout << "ERROR, port: " << port << " direction has not changed!" << endl;}
 	return false;
 }
@@ -57,10 +53,8 @@ bool gpio::set_value(int v) {
 	string value_file = GPIO_FOLDER;
 	value_file += to_string(port);
 	value_file += "/value";
-	//cout << port<< " value : " << value_file << endl;
 	ofstream is(value_file, ios::trunc | ios::out);
 	is << v;
 	is.close();
-	//if (v == get_value()) { return true; }
-	//else { cout << "ERROR, port: " << port << " value is not changed" << endl; }
+	if(v != get_value()) return false;
 }
