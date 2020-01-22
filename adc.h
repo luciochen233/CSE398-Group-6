@@ -6,17 +6,13 @@
 using namespace std;
 
 constexpr int PIN_MAX = 80;
-constexpr char ADC_FOLDER[] = "/sys/class/gpio/gpio";
+constexpr char ADC_FOLDER[] = "/sys/bus/iio/devices/iio:devices0";
 
-class gpio {
+class adc {
 	int port;
-	int direction;
 	int value;
 public:
-	gpio(int);
-	int get_direction();
-	int get_value();
-	bool set_direction(int);
-	bool set_value(int);
-    ~gpio(){}
+	adc(int);
+	int get_value(int);
+    ~adc(){}
 };
