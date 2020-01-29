@@ -5,14 +5,14 @@
 
 using namespace std;
 
-constexpr int PIN_MAX = 80;
-constexpr char ADC_FOLDER[] = "/sys/bus/iio/devices/iio:devices0";
+//constexpr int PIN_MAX = 80;
+constexpr char ADC_FOLDER[] = "/sys/bus/iio/devices/iio:device0/";
 
 class adc {
 	int port;
 	int value;
 public:
 	adc(int);
-	int get_value(int);
+	int get_value();
     ~adc(){}
 };

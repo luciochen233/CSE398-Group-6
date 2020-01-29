@@ -1,10 +1,19 @@
 #include "pwm.h"  
 
 pwm::pwm(int p) {
-    if( p!=0 ) p = 0; // it only support pwm-0:0
+    //if( p!=0 ) p = 0; // it only support pwm-0:0
     port = p;
     home_folder = PWM_FOLDER;
-    home_folder += "-0:0/"; // it only support pwm-0:0
+	switch (p){
+		case 0: home_folder += "-0:0/"; break;
+		case 1: home_folder += "-1:0/"; break;
+		case 2: home_folder += "-1:1/"; break;
+		case 3: home_folder += "-3:0/"; break;
+		default: home_folder += "-4:0/";
+	}
+	//set_enable(1);
+	set_period(1000000);
+    //home_folder += "-0:0/"; // it only support pwm-0:0
 }
 
 int pwm::get_capture(){
@@ -56,23 +65,23 @@ int pwm::get_uevent(){
 	return uevent;
 }
 
-bool pwm::set_capture(int){ //not implmented
-    return false; //we don't really need to change the capture
+bool pwm::set_capture(int){ //don't touch
+    return false;
 }
-bool pwm::set_uevent(int){ //not implmented
+bool pwm::set_uevent(int){
     return false;
 }
 
 bool pwm::set_duty_cycle(int v){
     string duty_cycle_file = home_folder;
-	duty_cycle_file += "duty_cycle"; // generate the file path
+	duty_cycle_file += "duty_cycle";
 	ofstream is(duty_cycle_file, ios::trunc | ios::out);
-	is << v; //read from the file
+	is << v;
 	is.close();
 }
 bool pwm::set_enable(int v){
     string enable_file = home_folder;
-	enable_file += "duty_cycle";
+	enable_file += "enable";
 	ofstream is(enable_file, ios::trunc | ios::out);
 	is << v;
 	is.close();
