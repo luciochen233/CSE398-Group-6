@@ -6,3 +6,5 @@ file_test/file_test/x64/
 file_test/file_test/v16/
 *.exe
 *.log
+*.o
+*.out
