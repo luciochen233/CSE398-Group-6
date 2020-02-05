@@ -22,22 +22,8 @@ void send_char(char a){
 }
 int main(){
 	wiringPiSetupGpio();
-//pinMode(2,OUTPUT);
 delay(500);
 char temp = 0b00000000;
-while(1){
-send_char(temp++);	
-//we are going to send character a
-//digitalWrite(2, LOW); //0110 0101
-//digitalWrite(2, HIGH);
-//digitalWrite(2, HIGH); //0110 0101
-//digitalWrite(2, LOW); //0110 0101
-//digitalWrite(2, LOW); //0110 0101
-//digitalWrite(2, HIGH); //0110 0101
-//digitalWrite(2, LOW); //0110 0101
-//digitalWrite(2, HIGH); //0110 0101
-delay(100);
-}
 cout << "lucio" << endl;
 return 0;
 }
