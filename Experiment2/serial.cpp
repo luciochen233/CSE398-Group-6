@@ -14,6 +14,19 @@ void get_serial(){
 		cout << (char)serialGetchar(fd) << endl;
 	}
 }
+char[] decode(char[] buff) {
+	int size = sizeof(buff)/sizeof(buff[0]);
+	int decode = 0;
+	int next_decode = 0;
+	decode = buff[decode];
+	while(decode != 0){
+		next_decode = buff[decode];
+		buff[decode]=0;
+		decode = next_decode;
+		next_decode = 0;
+	}
+	return buff;
+}
 
 float get_float(int fd){
 	char buf[6];
@@ -28,11 +41,11 @@ float get_float(int fd){
 			flo = *(float*)(buf+1);
 			//switch(r_size){
 			//	case 6: flo = *(float*)(buf+1);
-				cout << flo << endl;
+			cout << flo << endl;
 			//break;
 			//}
-		cout << "size is " << r_size << endl;
-		return flo;
+			cout << "size is " << r_size << endl;
+			return flo;
 		}
 		if(r_size == 6) return -1.1;
 	}
