@@ -32,7 +32,7 @@ vector<char> get_char_array(int fd){
 	int size = 0;
 	while(serialDataAvail(fd)){
 		char te = serialGetchar(fd);
-		temp.push_back(te)
+		temp.push_back(te);
 		if(te == 0x00) return temp;
 		size++;
 		if(size > 100) return temp;
@@ -42,7 +42,7 @@ vector<char> get_char_array(int fd){
 
 vector<float> char_to_float(vector<char> buff){
 	vector<float> temp;
-	byte[4] convert;
+	byte convert[4];
 	for(int i = 1; i< buff.size() - 1; i+=4){
 		convert[0] = buff[i];
 		convert[1] = buff[i+1];
