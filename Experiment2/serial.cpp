@@ -4,7 +4,7 @@
 #include <iostream>
 #include <thread>
 #include <chrono>
-#include <list>
+#include <vector>
 
 using namespace std;
 
@@ -14,7 +14,7 @@ void get_serial(){
 		cout << (char)serialGetchar(fd) << endl;
 	}
 }
-list<char> decode(list<char> buff) {
+vector<char> decode(vector<char> buff) {
 	int decode = 0;
 	int next_decode = 0;
 	decode = buff[decode];
@@ -27,8 +27,8 @@ list<char> decode(list<char> buff) {
 	return buff;
 }
 
-list<char> get_char_array(int fd){
-	list<char> temp;
+vector<char> get_char_array(int fd){
+	vector<char> temp;
 	int size = 0;
 	while(serialDataAvail(fd)){
 		char te = serialGetchar(fd);
@@ -40,8 +40,8 @@ list<char> get_char_array(int fd){
 	return temp;
 }
 
-list<float> char_to_float(list<char> buff){
-	list<float> temp;
+vector<float> char_to_float(vector<char> buff){
+	vector<float> temp;
 	byte[4] convert;
 	for(int i = 1; i< buff.size() - 1; i+=4){
 		convert[0] = buff[i];
@@ -53,8 +53,8 @@ list<float> char_to_float(list<char> buff){
 	return temp;
 }
 
-list<float> do_everything(int fd){
-	list<char> temp = get_char_array(fd);
+vector<float> do_everything(int fd){
+	vector<char> temp = get_char_array(fd);
 	temp = decode(temp);
 	return char_to_float(temp);
 }
@@ -82,10 +82,10 @@ float get_float(int fd){
 	}
 	return -1;
 }
-list<float> get_float_array(int fd){
+vector<float> get_float_array(int fd){
 	char buf[42];
 	int r_size = 0;
-	list<float> l1;
+	vector<float> l1;
 	float* flo;
 	while(serialDataAvail(fd)){
 		char te = serialGetchar(fd);
@@ -113,7 +113,7 @@ int main(){
 	while(1){
 		if(serialDataAvail(fd)){
 			delay(400);
-			list<float> l1 = do_everything(fd);
+			vector<float> l1 = do_everything(fd);
 			for(auto i: l1){
 				cout << i << " " << endl;
 			}
