@@ -14,8 +14,7 @@ void get_serial(){
 		cout << (char)serialGetchar(fd) << endl;
 	}
 }
-char[] decode(char[] buff) {
-	int size = sizeof(buff)/sizeof(buff[0]);
+list<char> decode(list<char> buff) {
 	int decode = 0;
 	int next_decode = 0;
 	decode = buff[decode];
@@ -26,6 +25,38 @@ char[] decode(char[] buff) {
 		next_decode = 0;
 	}
 	return buff;
+}
+
+list<char> get_char_array(int fd){
+	list<char> temp;
+	int size = 0;
+	while(serialDataAvail(fd)){
+		char te = serialGetchar(fd);
+		temp.push_back(te)
+		if(te == 0x00) return temp;
+		size++;
+		if(size > 100) return temp;
+	}
+	return temp;
+}
+
+list<float> char_to_float(list<char> buff){
+	list<float> temp;
+	byte[4] convert;
+	for(int i = 1; i< buff.size() - 1; i+=4){
+		convert[0] = buff[i];
+		convert[1] = buff[i+1];
+		convert[2] = buff[i+2];
+		convert[3] = buff[i+3];
+		temp.push_back((float)convert)
+	}
+	return temp;
+}
+
+list<float> do_everything(int fd){
+	list<char> temp = get_char_array(fd);
+	temp = decode(temp);
+	return char_to_float(temp);
 }
 
 float get_float(int fd){
@@ -73,6 +104,7 @@ list<float> get_float_array(int fd){
 	}
 	return l1;
 }
+
 int main(){
 	//get_serial();
 	int fd = serialOpen("/dev/serial0", 9600);
@@ -81,7 +113,7 @@ int main(){
 	while(1){
 		if(serialDataAvail(fd)){
 			delay(400);
-			list<float> l1 = get_float_array(fd);
+			list<float> l1 = do_everything(fd);
 			for(auto i: l1){
 				cout << i << " " << endl;
 			}
