@@ -21,7 +21,7 @@ class cobs_float_array {
   ~cobs_float_array() { serialClose(fd); }
   void read();
 
-  vector<float> getData() {ava = false; return result;  }
+  vector<float> getData() {ava = false; return result; }
   bool avaliable() { return ava; }
 
   friend ostream &operator<<(ostream &os, const cobs_float_array &arr);
@@ -73,6 +73,7 @@ void cobs_float_array::decode() {  // after decode, the first and last byte
 
 void cobs_float_array::translate() {
   if (!ava) return;
+  if(result.size() >= 10) result.clear();
   char convert[4];
   for (int i = 1; i < buff.size() - 1; i += 4) {
     convert[0] = buff[i];
