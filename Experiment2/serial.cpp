@@ -21,7 +21,7 @@ class cobs_float_array {
   ~cobs_float_array() { serialClose(fd); }
   void read();
 
-  vector<float> getData() { return result; }
+  vector<float> getData() {ava = false; return result;  }
   bool avaliable() { return ava; }
 
   friend ostream &operator<<(ostream &os, const cobs_float_array &arr);
