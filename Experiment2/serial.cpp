@@ -20,12 +20,24 @@ class cobs_float_array {
   cobs_float_array();
   ~cobs_float_array() { serialClose(fd); }
   void read();
+  void send();
 
   vector<float> getData() {ava = false; return result; }
   bool avaliable() { return ava; }
 
   friend ostream &operator<<(ostream &os, const cobs_float_array &arr);
 };
+
+  void cobs_float_array::send(){
+	  uint8_t b[3];
+	  b[0] = 0x02;
+	  b[1] = 'h';
+	  b[2] = 0x00; 
+	//serialPrintf (fd, b);
+	serialPutchar ( fd, 0x02) ;
+	serialPutchar ( fd, 'h') ;
+	serialPutchar ( fd, 0x00) ;
+  }
 
 void cobs_float_array::read() {
   read_stream();
@@ -74,6 +86,12 @@ void cobs_float_array::decode() {  // after decode, the first and last byte
 void cobs_float_array::translate() {
   if (!ava) return;
   if(!result.empty()) result.clear();
+  if(buff.size() < 7){
+	buff.clear();
+	ava = false;
+	send();
+	return;
+  }
   char convert[4];
   for (int i = 1; i < buff.size() - 1; i += 4) {
     convert[0] = buff[i];
