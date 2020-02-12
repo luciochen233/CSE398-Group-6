@@ -73,7 +73,7 @@ void cobs_float_array::decode() {  // after decode, the first and last byte
 
 void cobs_float_array::translate() {
   if (!ava) return;
-  if(result.size() >= 10) result.clear();
+  if(!result.empty()) result.clear();
   char convert[4];
   for (int i = 1; i < buff.size() - 1; i += 4) {
     convert[0] = buff[i];
