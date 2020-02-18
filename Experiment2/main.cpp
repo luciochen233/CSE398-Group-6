@@ -22,6 +22,13 @@ void send_char(char a){
 }
 int main(){
 	wiringPiSetupGpio();
+	while(1){
+		digitalWrite(2,HIGH);
+		digitalWrite(2,LOW);
+	}
+
+
+
 delay(500);
 char temp = 0b00000000;
 cout << "lucio" << endl;
