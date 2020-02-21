@@ -7,15 +7,17 @@
 class servo{
 private:
     int port;
-    int degree;
+    float degree;
     int offset;
+    int fd;
+    void setPosition();
 public:
-    servo();
     ~servo(){};
-    servo(int p);
-    servo(int p, int d);
+    servo(int, int);
     int getPort();
-    void setPort(int p);
+    void setPort(int);
     int getDegree();
-    void setDegree(int d);
+    void setDegree(int);
+    void setDegree(float);
+
 };

@@ -29,9 +29,11 @@ void test1(){
 int main(){
     servo s1(0,90);
     servo s2(1,90);
-    int i = 90;
-    int j = 90;
+    float i = 90;
+
     bool incre;
+
+    float v = 2.5;
     while(1){
         if(i>=180){
             incre = false;
@@ -40,16 +42,16 @@ int main(){
             incre = true;
         }
         if(incre){
-            s1.setDegree(i++);
+            i += v;
+            s1.setDegree(i);
             s2.setDegree(i);
-            j++;
         }
         else{
-            s1.setDegree(i--);
+            i -= v;
+            s1.setDegree(i);
             s2.setDegree(i);
-            j++;
         }
-        delay(30);
+        delay(100);
     }
     cout << "input degree" << endl;
     int user;
