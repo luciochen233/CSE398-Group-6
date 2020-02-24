@@ -1,0 +1,3 @@
+/home/pi/cpp/SU-CSE398/Experiment3/opencv/CMakeFiles/rebuild_cache.dir
+/home/pi/cpp/SU-CSE398/Experiment3/opencv/CMakeFiles/main.dir
+/home/pi/cpp/SU-CSE398/Experiment3/opencv/CMakeFiles/edit_cache.dir
