@@ -1,0 +1,3 @@
+/home/pi/cpp/SU-CSE398/Experiment3/lucio_face/CMakeFiles/rebuild_cache.dir
+/home/pi/cpp/SU-CSE398/Experiment3/lucio_face/CMakeFiles/main.dir
+/home/pi/cpp/SU-CSE398/Experiment3/lucio_face/CMakeFiles/edit_cache.dir
