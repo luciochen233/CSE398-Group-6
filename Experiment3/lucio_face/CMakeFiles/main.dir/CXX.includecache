@@ -17,6 +17,12 @@ opencv2/videoio.hpp
 /home/pi/cpp/SU-CSE398/Experiment3/lucio_face/opencv2/videoio.hpp
 iostream
 -
+tuple
+-
+thread
+-
+queue
+-
 
 /usr/local/include/opencv4/opencv2/calib3d.hpp
 opencv2/core.hpp
