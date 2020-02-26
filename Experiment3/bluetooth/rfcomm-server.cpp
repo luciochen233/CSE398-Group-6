@@ -64,19 +64,18 @@ int main(int argc, char **argv)
     servo s1(0,90);
     servo s2(1,90);
     while(1){
-        bytes_read = read(client, buf, sizeof(buf));
+            bytes_read = read(client, buf, sizeof(buf));
             if( bytes_read > 0 ) {
-                //printf("received [%s]\n", buf);
-
+                    //printf("received [%s]\n", buf);
                 string temp = convert(bytes_read,buf);
                 cout << temp << endl;
-            if(temp == "up"){
-                printf("up\n");
-                move_up(s1);
-            }else{
-                printf("Down\n");
-                move_down(s1);
-            }
+                if(temp == "up"){
+                    printf("up\n");
+                    move_up(s1);
+                }else{
+                    printf("Down\n");
+                    move_down(s1);
+                }
             }
     }
   

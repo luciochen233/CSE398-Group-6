@@ -150,6 +150,33 @@ main.cpp.s:
 	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+servo.o: servo.cpp.o
+
+.PHONY : servo.o
+
+# target to build an object file
+servo.cpp.o:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/servo.cpp.o
+.PHONY : servo.cpp.o
+
+servo.i: servo.cpp.i
+
+.PHONY : servo.i
+
+# target to preprocess a source file
+servo.cpp.i:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/servo.cpp.i
+.PHONY : servo.cpp.i
+
+servo.s: servo.cpp.s
+
+.PHONY : servo.s
+
+# target to generate assembly for a file
+servo.cpp.s:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/servo.cpp.s
+.PHONY : servo.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -162,6 +189,9 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... servo.o"
+	@echo "... servo.i"
+	@echo "... servo.s"
 .PHONY : help
 
 

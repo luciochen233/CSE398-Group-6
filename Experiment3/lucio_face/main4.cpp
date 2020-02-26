@@ -7,8 +7,6 @@
 #include <thread>
 #include <queue>
 
-#include "servo.h"
-
 using namespace std;
 using namespace cv;
 void detectAndDisplay( Mat& frame );
@@ -21,9 +19,8 @@ CascadeClassifier face_cascade;
 
 int main( int argc, const char** argv )
 {
-    //String face_cascade_name = "./data/haarcascades/haarcascade_frontalface_alt_tree.xml";
+    String face_cascade_name = "./data/haarcascades/haarcascade_frontalface_alt_tree.xml";
     //String face_cascade_name = "./data/haarcascades/haarcascade_frontalcatface.xml";
-    String face_cascade_name = "./data/haarcascades/haarcascade_frontalface_alt.xml";
     queue<thread> threads;
     if( !face_cascade.load( face_cascade_name ) )
     {
@@ -31,8 +28,6 @@ int main( int argc, const char** argv )
         return -1;
     };
     
-    servo s1(0,60);
-    servo s2(1,90);
     
     VideoCapture capture;
     //-- 2. Read the video stream
@@ -52,35 +47,26 @@ int main( int argc, const char** argv )
             cout << "--(!) No captured frame -- Break!\n";
             break;
         }
-        resize(frame,frame,Size(864,648));
+        //resize(frame,frame,Size(864,648));
         cout << " resize  ";
         //-- 3. Apply the classifier to the frame
         //detectAndDisplay( frame );
-        if(++frame_counter == 5){
-            cout << " detect ";
-            threads.push(thread(Detect_position,frame));
-        }
+        // if(++frame_counter == 5){
+        //     cout << " detect ";
+        //     threads.push(thread(Detect_position,frame));
+        // }
 
-        if(!buffer.empty()){
-            threads.front().join();
-            threads.pop();
-            if(buffer.front() != tuple<int,int>{0,0}){
-                int x = get<0>(buffer.front());
-                int y = get<1>(buffer.front());
-                cout << x << "," << y << endl;
-                
-                int temp = s2.getDegree();
-                s2.setDegree(temp-(x-432)/43);
- 
-                int temp2 = s1.getDegree();
-                s1.setDegree(temp2+(y-324)/32);
-                
-            }
-            buffer.pop();
-            //threads.push(thread(Detect_position,frame));
-            frame_counter = 0;
-        }
-
+        // if(!buffer.empty()){
+        //     threads.front().join();
+        //     threads.pop();
+        //     if(buffer.front() != tuple<int,int>{0,0}){
+        //         cout << get<0>(buffer.front()) << "," << get<1>(buffer.front()) << endl;
+        //     }
+        //     buffer.pop();
+        //     //threads.push(thread(Detect_position,frame));
+        //     frame_counter = 0;
+        // }
+        detectAndDisplay(frame);
         
         
         if( waitKey(10) == 27 )
@@ -98,7 +84,7 @@ void Detect_position(Mat frame){
     cvtColor( frame, frame_gray, COLOR_BGR2GRAY );
     equalizeHist( frame_gray, frame_gray );
     std::vector<Rect> faces;
-    face_cascade.detectMultiScale( frame_gray, faces, 1.1 ,3,0|2, Size(100,100));
+    face_cascade.detectMultiScale( frame_gray, faces, 1.1,3,0|2, Size(75,75));
     //tuple<int,int> t1;
     for ( size_t i = 0; i < faces.size() && i<1; i++ )
     {
@@ -114,10 +100,11 @@ void detectAndDisplay( Mat& frame )
 {
     Mat frame_gray;
     cvtColor( frame, frame_gray, COLOR_BGR2GRAY );
-    equalizeHist( frame_gray, frame_gray );
+    //equalizeHist( frame_gray, frame_gray );
     //-- Detect faces
     std::vector<Rect> faces;
-    face_cascade.detectMultiScale( frame_gray, faces, 1.3);
+    //face_cascade.detectMultiScale( frame_gray, faces, 1.1);
+    face_cascade.detectMultiScale( frame_gray, faces, 1.1,3,0|2, Size(100,100));
     
     for ( size_t i = 0; i < faces.size() && i<1; i++ )
     {

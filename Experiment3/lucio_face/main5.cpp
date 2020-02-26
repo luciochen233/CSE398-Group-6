@@ -7,6 +7,13 @@
 #include <thread>
 #include <queue>
 
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/socket.h>
+#include "bluetooth.h"
+#include "rfcomm.h"
+#include <string>
+
 #include "servo.h"
 
 using namespace std;
@@ -15,12 +22,65 @@ void detectAndDisplay( Mat& frame );
 void Detect_position(Mat frame);
 
 queue<tuple<int,int>> buffer;
+bool on_off;
 
 CascadeClassifier face_cascade;
 
 
+string convert(int size, char* buf){
+    string temp = "";
+    for(int i = 0; i< size; i++){
+        temp += buf[i];
+    }
+    return temp;
+}
+
+
+
+void ble_control(int client){
+    servo s1(0,60);
+    servo s2(1,90);
+    int bytes_read;
+    char buf[1024] = { 0 };
+    cout << "start bluetooth" << endl;
+    while(1){
+        bytes_read = read(client, buf, sizeof(buf));
+        if( bytes_read > 0 ) {
+                //printf("received [%s]\n", buf);
+            string temp = convert(bytes_read,buf);
+            //cout << temp << endl;
+            float degree1 = 0.0;
+            float degree2 = 0.0;
+            if(temp == "on") on_off = true;
+            if(temp == "off") on_off = false;
+            if(temp == "quit") exit(0);
+            if(temp == "up"){
+                degree1 = s1.getDegree();
+                degree2 = s2.getDegree();
+                s1.setDegree((float)(degree1-3.1415));
+            }
+            if(temp == "down"){
+                degree1 = s1.getDegree();
+                s1.setDegree((float)(degree1+3.1415));
+            }
+            if(temp == "left"){
+                degree2 = s2.getDegree();
+                s2.setDegree((float)(degree2+3.1415));
+            }
+            if(temp == "right"){
+                degree2 = s2.getDegree();
+                s2.setDegree((float)(degree2-3.1415));
+            }
+            cout << temp << endl;
+            
+        }
+    }
+}
+
+
 int main( int argc, const char** argv )
 {
+    on_off = true;
     //String face_cascade_name = "./data/haarcascades/haarcascade_frontalface_alt_tree.xml";
     //String face_cascade_name = "./data/haarcascades/haarcascade_frontalcatface.xml";
     String face_cascade_name = "./data/haarcascades/haarcascade_frontalface_alt.xml";
@@ -31,8 +91,36 @@ int main( int argc, const char** argv )
         return -1;
     };
     
-    servo s1(0,60);
-    servo s2(1,90);
+    
+
+    //bluetooth
+    struct sockaddr_rc loc_addr = { 0 }, rem_addr = { 0 };
+    
+    int s, client, bytes_read;
+    socklen_t opt = sizeof(rem_addr);
+    char buf[1024] = { 0 };
+    // allocate socket
+    s = socket(AF_BLUETOOTH, SOCK_STREAM, BTPROTO_RFCOMM);
+
+    // bind socket to port 1 of the first available 
+    // local bluetooth adapter
+    loc_addr.rc_family = AF_BLUETOOTH;
+    //loc_addr.rc_bdaddr = *BDADDR_ANY;
+    loc_addr.rc_channel = (uint8_t) 1;
+    bind(s, (struct sockaddr *)&loc_addr, sizeof(loc_addr));
+
+    // put socket into listening mode
+    listen(s, 1);
+
+    // accept one connection
+    client = accept(s, (struct sockaddr *)&rem_addr, &opt);
+
+    ba2str( &rem_addr.rc_bdaddr, buf );
+    fprintf(stderr, "accepted connection from %s\n", buf);
+    //memset(buf, 0, sizeof(buf));
+    //END of bluetooth
+
+
     
     VideoCapture capture;
     //-- 2. Read the video stream
@@ -44,8 +132,18 @@ int main( int argc, const char** argv )
     }
     Mat frame;
     int frame_counter = 0;
+
+    servo s1(0,60);
+    servo s2(1,90);
+
+    thread t1(ble_control,client);
     while ( capture.read(frame) )
     {
+        //bluetooth
+        
+
+        //END of bluetooth
+
         cout << "new frame ";
         if( frame.empty() )
         {
@@ -56,30 +154,32 @@ int main( int argc, const char** argv )
         cout << " resize  ";
         //-- 3. Apply the classifier to the frame
         //detectAndDisplay( frame );
-        if(++frame_counter == 5){
+        if(on_off){
+            if(++frame_counter == 5){
             cout << " detect ";
             threads.push(thread(Detect_position,frame));
-        }
-
-        if(!buffer.empty()){
-            threads.front().join();
-            threads.pop();
-            if(buffer.front() != tuple<int,int>{0,0}){
-                int x = get<0>(buffer.front());
-                int y = get<1>(buffer.front());
-                cout << x << "," << y << endl;
-                
-                int temp = s2.getDegree();
-                s2.setDegree(temp-(x-432)/43);
- 
-                int temp2 = s1.getDegree();
-                s1.setDegree(temp2+(y-324)/32);
-                
             }
-            buffer.pop();
-            //threads.push(thread(Detect_position,frame));
-            frame_counter = 0;
+            if(!buffer.empty()){
+                threads.front().join();
+                threads.pop();
+                if(buffer.front() != tuple<int,int>{0,0}){
+                    int x = get<0>(buffer.front());
+                    int y = get<1>(buffer.front());
+                    cout << x << "," << y << endl;
+                    
+                    int temp = s2.getDegree();
+                    s2.setDegree(temp-(x-432)/43);
+    
+                    int temp2 = s1.getDegree();
+                    s1.setDegree(temp2+(y-324)/32);
+                    
+                }
+                buffer.pop();
+                //threads.push(thread(Detect_position,frame));
+                frame_counter = 0;
+            }
         }
+        
 
         
         
@@ -90,6 +190,7 @@ int main( int argc, const char** argv )
         imshow( "Capture - Face detection", frame );
         cout << endl;
     }
+    t1.join();
     return 0;
 }
 

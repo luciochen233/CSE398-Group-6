@@ -6,6 +6,20 @@
 
 #IncludeRegexTransform: 
 
+/home/pi/cpp/SU-CSE398/Experiment3/lucio_face/bluetooth.h
+stdio.h
+-
+stdint.h
+-
+string.h
+-
+endian.h
+-
+byteswap.h
+-
+netinet/in.h
+-
+
 /home/pi/cpp/SU-CSE398/Experiment3/lucio_face/main.cpp
 opencv2/objdetect.hpp
 /home/pi/cpp/SU-CSE398/Experiment3/lucio_face/opencv2/objdetect.hpp
@@ -22,6 +36,36 @@ tuple
 thread
 -
 queue
+-
+stdio.h
+-
+unistd.h
+-
+sys/socket.h
+-
+bluetooth.h
+/home/pi/cpp/SU-CSE398/Experiment3/lucio_face/bluetooth.h
+rfcomm.h
+/home/pi/cpp/SU-CSE398/Experiment3/lucio_face/rfcomm.h
+string
+-
+servo.h
+/home/pi/cpp/SU-CSE398/Experiment3/lucio_face/servo.h
+
+/home/pi/cpp/SU-CSE398/Experiment3/lucio_face/rfcomm.h
+sys/socket.h
+-
+
+/home/pi/cpp/SU-CSE398/Experiment3/lucio_face/servo.h
+wiringPi.h
+-
+wiringPiI2C.h
+-
+iostream
+-
+string
+-
+vector
 -
 
 /usr/local/include/opencv4/opencv2/calib3d.hpp

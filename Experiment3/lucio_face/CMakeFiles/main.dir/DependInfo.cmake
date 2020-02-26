@@ -5,6 +5,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
   "/home/pi/cpp/SU-CSE398/Experiment3/lucio_face/main.cpp" "/home/pi/cpp/SU-CSE398/Experiment3/lucio_face/CMakeFiles/main.dir/main.cpp.o"
+  "/home/pi/cpp/SU-CSE398/Experiment3/lucio_face/servo.cpp" "/home/pi/cpp/SU-CSE398/Experiment3/lucio_face/CMakeFiles/main.dir/servo.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
