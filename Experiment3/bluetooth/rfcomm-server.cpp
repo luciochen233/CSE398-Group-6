@@ -13,14 +13,14 @@ using namespace std;
 
 void move_up(servo &s){
     float d = s.getDegree();
-    printf("the degree is : %f\n",d);
+    //printf("the degree is : %f\n",d);
     if(d < 0) d = 90;
     s.setDegree(d-5);
 }
 
 void move_down(servo &s){
     float d = s.getDegree();
-    printf("the degree is : %f\n",d);
+    //printf("the degree is : %f\n",d);
     if(d > 180) d = 90;
     s.setDegree(d+5);
 }
